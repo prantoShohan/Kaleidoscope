@@ -1,11 +1,9 @@
 #include "glad/glad.h" 
 #include "GLFW/glfw3.h"
 
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-
 #include "utils/utils.h"
+
+#define STB_IMAGE_IMPLEMENTATION
 #include "utils/stb_image.h"
 
 #include "Shader.h"
@@ -46,136 +44,180 @@ int main()
 	
 	glViewport(0, 0, 800, 600);
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-
-	float vertices[] = {
-	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-	 0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-
-	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-	-0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
-	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-
-	-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-	-0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-	-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-
-	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	 0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-
-	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	 0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
-	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-
-	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-	-0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
-	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
-	};
-
-	unsigned int vao, vbo;
-
-	glCall(glGenVertexArrays(1, &vao));
-	glCall(glBindVertexArray(vao));
-
-	glCall(glGenBuffers(1, &vbo));
-	glCall(glBindBuffer(GL_ARRAY_BUFFER, vbo));
-	glCall(glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW));
-
-	glCall(glEnableVertexAttribArray(0));
-	glCall(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 20, 0));
-
-	glCall(glEnableVertexAttribArray(1));
-	glCall(glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 20, (void*)12));
-
-
-
-
-
-
-
-
-	Shader shader("res/shaders/shader.shader");
-	shader.bind();
-
-	unsigned int tex;
-
-	glCall(glGenTextures(1, &tex));
-	glCall(glActiveTexture(tex));
-	glCall(glBindTexture(GL_TEXTURE_2D, tex));
-
-	glCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT));
-	glCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT));
-	glCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
-	glCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
-
-	int width, height, nrChannels;
-	stbi_set_flip_vertically_on_load(true);
-	unsigned char* data = stbi_load("res/textures/container.jpg", &width, &height, &nrChannels, 0);
-	if (data)
 	{
-		glCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data));
+// 		float vertices[] = {
+// 
+// 		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+// 		 0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+// 		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+// 		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+// 		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+// 		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f
+// 
+// 		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+// 		 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+// 		 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+// 		 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+// 		-0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
+// 		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+// 
+// 		-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+// 		-0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+// 		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+// 		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+// 		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+// 		-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+// 
+// 		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+// 		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+// 		 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+// 		 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+// 		 0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+// 		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+// 
+// 		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+// 		 0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
+// 		 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+// 		 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+// 		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+// 		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+// 
+// 		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+// 		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+// 		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+// 		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+// 		-0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
+// 		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
+// 
+// 		};
+// 		float vertices[] = {
+// 			// positions          // colors           // texture coords
+// 			 0.5f,  0.5f, 0.0f,  1.0f, 1.0f,   // top right
+// 			 0.5f, -0.5f, 0.0f,  1.0f, 0.0f,   // bottom right
+// 			-0.5f, -0.5f, 0.0f,  0.0f, 0.0f,   // bottom left
+// 			-0.5f,  0.5f, 0.0f,  0.0f, 1.0f    // top left 
+// 		};
+// 
+// 		unsigned int indices[] = {
+// 			0, 1, 2,
+// 			0, 2, 3
+// 		};
 
-	}
-	else
-	{
-		LOG << "ERROR loading image" << END;
-	}
-	stbi_image_free(data);
+		float vertices[] = {
+			0.5f,   0.5f,  -0.5f,       0.0f,  0.0f,
+			0.5f,   0.5f,   0.5f,		1.0f,  0.0f,
+		   -0.5f,   0.5f,   0.5f,		1.0f,  1.0f,
+		   -0.5f,   0.5f,  -0.5f,		0.0f,  1.0f,
 
-	shader.setUniformInt("texture1", 0);
+			0.5f,  -0.5f,  -0.5f,		1.0f,  1.0f,
+			0.5f,  -0.5f,   0.5f,		0.0f,  1.0f,
+		   -0.5f,  -0.5f,   0.5f,		0.0f,  0.0f,
+		   -0.5f,  -0.5f,  -0.5f,		1.0f,  0.0f,
 
-	glm::mat4 model = glm::mat4(1.0f);
-	model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		};
 
-	glm::mat4 view = glm::mat4(1.0f);
-	view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+		unsigned int indices[] = {
+			2, 1, 0, 
+			2, 0, 3,
+			1, 5, 4, 
+			1, 4, 0, 
+			6, 5, 4,
+			6, 4, 7,
+			2, 6, 5,
+			2, 5, 1, 
+			0, 4, 7,
+			0, 7, 3,
+			3, 7, 6, 
+			3, 6, 2
+		};
 
-	glm::mat4 projection;
-	projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
+		unsigned int vao, vbo, ebo;
 
-	shader.setUniformMat4("model", model);
-	shader.setUniformMat4("view", view);
-	shader.setUniformMat4("projection", projection);
+		glCall(glGenVertexArrays(1, &vao));
+		glCall(glBindVertexArray(vao));
 
+		glCall(glGenBuffers(1, &vbo));
+		glCall(glBindBuffer(GL_ARRAY_BUFFER, vbo));
+		glCall(glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW));
 
+		glCall(glGenBuffers(1, &ebo));
+		glCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo));
+		glCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW));
 
+		glCall(glEnableVertexAttribArray(0));
+		glCall(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 20, (void*)0));
 
-
-
-
-
-
-	while (!glfwWindowShouldClose(window))
-	{
-		//Process inputs
-		processInput(window);
-		glCall(glClearColor(0.2f, 0.3f, 0.3f, 1.0f));
-		glCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
-
-		glCall(glDrawArrays(GL_TRIANGLES, 0, 36));
+		glCall(glEnableVertexAttribArray(1));
+		glCall(glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 20, (void*)12));
 
 
-		glfwSwapBuffers(window);
-		glfwPollEvents();
+
+		Shader shader("res/shaders/shader.sh");
+		shader.bind();
+
+		unsigned int tex;
+
+		glCall(glGenTextures(1, &tex));
+		glCall(glActiveTexture(GL_TEXTURE0));
+		glCall(glBindTexture(GL_TEXTURE_2D, tex));
+
+		glCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT));
+		glCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT));
+		glCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
+		glCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
+
+		int width, height, nrChannels;
+		stbi_set_flip_vertically_on_load(true);
+		unsigned char* data = stbi_load("res/textures/container.jpg", &width, &height, &nrChannels, 0);
+		if (data)
+		{
+			glCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data));
+		}
+		else
+		{
+			LOG << "ERROR loading image" << END;
+		}
+		stbi_image_free(data);
+
+		shader.setUniformInt("texture1", 0);
+
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::rotate(model, glm::radians(-30.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+
+		glm::mat4 view = glm::mat4(1.0f);
+		view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+
+		glm::mat4 projection;
+		projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
+
+		shader.setUniformMat4("model", model);
+		shader.setUniformMat4("view", view);
+		shader.setUniformMat4("projection", projection);
+
+		glEnable(GL_DEPTH_TEST);
+
+		while (!glfwWindowShouldClose(window))
+		{
+			//Process inputs
+			processInput(window);
+			glCall(glClearColor(0.2f, 0.3f, 0.3f, 1.0f));
+			glCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
+
+
+			glCall(glBindVertexArray(vao));
+			shader.bind();
+
+			glCall(glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0));
+			//glCall(glDrawArrays(GL_TRIANGLES, 0, 36));
+
+			glCall(glBindVertexArray(0));
+			shader.unbind();
+
+
+			glfwSwapBuffers(window);
+			glfwPollEvents();
+		}
+
 	}
 	
 	glfwTerminate();

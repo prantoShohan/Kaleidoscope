@@ -2,10 +2,6 @@
 
 #include "utils/utils.h"
 
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-
 #include <unordered_map>
 
 struct ShaderSource {
@@ -15,13 +11,15 @@ struct ShaderSource {
 
 class Shader
 {
-public:
-	unsigned int m_shaderID;
+private:
+
 	std::string m_filepath;
 	std::unordered_map<std::string, int> m_uniforms;
-	bool m_bound;
+	bool bound;
 
-	Shader(std::string filepath);
+public:
+	unsigned int m_rendererID;
+	Shader(const std::string filepath);
 	~Shader();
 
 	void bind();
@@ -33,6 +31,8 @@ public:
 
 	int getUniformLoaction(std::string name);
 
+
+private:
 	unsigned int createShader(const std::string& vertesShader, const std::string& fragmentShader);
 	unsigned int compileShader(unsigned int type, const std::string& source);
 	ShaderSource parseShader(const std::string& filepath);

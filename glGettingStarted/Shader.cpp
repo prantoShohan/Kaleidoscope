@@ -3,39 +3,68 @@
 #include <fstream>
 #include <sstream>
 
-Shader::Shader(std::string filepath):
-	m_filepath(filepath), m_bound(false)
+Shader::Shader(const std::string filepath)
+	:m_filepath(filepath), bound(false)
 {
 	ShaderSource source = parseShader(filepath);
-	m_shaderID = createShader(source.vertexShader, source.fragmentShader);
+	//std::cout << source.fragmentShader << "\n" << source.vertexShader;
+	m_rendererID = createShader(source.vertexShader, source.fragmentShader);
 
-	LOG << "createdShader, ID:" << m_shaderID << END;
 }
 
 Shader::~Shader()
 {
-	glCall(glDeleteShader(m_shaderID));
-	LOG << "Deleted Shader :" << m_shaderID << END;
+	glCall(glDeleteProgram(m_rendererID));
 }
 
 void Shader::bind()
 {
-	if (!m_bound)
+	if (!bound)
 	{
-		glCall(glUseProgram(m_shaderID));
-		m_bound = true;
-
-		LOG << "Bound Shader :" << m_shaderID << END;
+		glCall(glUseProgram(m_rendererID));
+		bound = true;
 	}
 }
 
 void Shader::unbind()
 {
-	if (m_bound)
+	glCall(glUseProgram(0));
+	bound = false;
+}
+
+
+
+
+void Shader::setUniformInt(std::string name, int data)
+{
+	glCall(glUniform1i(getUniformLoaction(name), data));
+}
+
+void Shader::setuniformFloat(std::string name, float data)
+{
+	glCall(glUniform1f(getUniformLoaction(name), data));
+}
+
+void Shader::setUniformMat4(std::string name, glm::mat4 data)
+{
+	glCall(glUniformMatrix4fv(getUniformLoaction(name), 1, GL_FALSE, glm::value_ptr(data)));
+}
+
+int Shader::getUniformLoaction(std::string name)
+{
+	if (m_uniforms.find(name) != m_uniforms.end())
 	{
-		glCall(glUseProgram(0));
-		m_bound = false;
-		LOG << "Unbound Shader :" << m_shaderID << END;
+		return m_uniforms[name];
+	}
+	else
+	{
+		glCall(int location = glGetUniformLocation(m_rendererID, name.c_str()));
+		m_uniforms[name] = location;
+		if (location == -1)
+		{
+			std::cout << "UNIFORM NOT FOUND\n";
+		}
+		return location;
 	}
 }
 
@@ -108,4 +137,5 @@ ShaderSource Shader::parseShader(const std::string& filepath)
 	}
 
 	return { ss[0].str(), ss[1].str() };
+
 }
