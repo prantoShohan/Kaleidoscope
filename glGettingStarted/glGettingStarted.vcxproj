@@ -150,10 +150,19 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
+    <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Vendor\glad.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Shader.h" />
+    <ClInclude Include="utils\stb_image.h" />
     <ClInclude Include="utils\utils.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\shaders\shader.sh" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\textures\container.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

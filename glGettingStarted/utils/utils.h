@@ -20,3 +20,6 @@ static bool glLogCall(const char* function, const char* file, int line) {
 	}
 	return true;
 }
+
+#define LOG std::cout
+#define END std::endl
