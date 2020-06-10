@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30128.74
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "glGettingStarted", "glGettingStarted\glGettingStarted.vcxproj", "{2F2B7FA4-BCB8-43FF-992A-EB50B34B36E8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2F2B7FA4-BCB8-43FF-992A-EB50B34B36E8}.Debug|x64.ActiveCfg = Debug|x64
+		{2F2B7FA4-BCB8-43FF-992A-EB50B34B36E8}.Debug|x64.Build.0 = Debug|x64
+		{2F2B7FA4-BCB8-43FF-992A-EB50B34B36E8}.Debug|x86.ActiveCfg = Debug|Win32
+		{2F2B7FA4-BCB8-43FF-992A-EB50B34B36E8}.Debug|x86.Build.0 = Debug|Win32
+		{2F2B7FA4-BCB8-43FF-992A-EB50B34B36E8}.Release|x64.ActiveCfg = Release|x64
+		{2F2B7FA4-BCB8-43FF-992A-EB50B34B36E8}.Release|x64.Build.0 = Release|x64
+		{2F2B7FA4-BCB8-43FF-992A-EB50B34B36E8}.Release|x86.ActiveCfg = Release|Win32
+		{2F2B7FA4-BCB8-43FF-992A-EB50B34B36E8}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E0A5AAC7-490A-4620-815A-C119456BAB2C}
+	EndGlobalSection
+EndGlobal
