@@ -1,7 +1,7 @@
 #pragma once
 
 #include "utils/utils.h"
-
+#include "Texture.h"
 #include <unordered_map>
 
 struct ShaderSource {
@@ -24,6 +24,8 @@ public:
 
 	void bind();
 	void unbind();
+
+	void setTexture(Texture tex);
 
 	void setUniformInt(std::string name, int data);
 	void setuniformFloat(std::string name, float data);

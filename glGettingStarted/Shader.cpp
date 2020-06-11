@@ -35,6 +35,11 @@ void Shader::unbind()
 
 
 
+void Shader::setTexture(Texture tex)
+{
+	setUniformInt(tex.m_name.c_str(), tex.m_textureUnit);
+}
+
 void Shader::setUniformInt(std::string name, int data)
 {
 	glCall(glUniform1i(getUniformLoaction(name), data));

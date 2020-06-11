@@ -7,7 +7,6 @@
 
 #include <map>
 
-
 #include "Shader.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
@@ -235,7 +234,7 @@ int main()
 
 		/*shader.setUniformInt("texture1", 0);*/
 
-		shader.setUniformInt(tex.m_name.c_str(), tex.m_textureUnit);
+		shader.setTexture(tex);
 
 // 		glm::mat4 model = glm::mat4(1.0f);
 // 		model = glm::rotate(model, glm::radians(-30.0f), glm::vec3(1.0f, 0.0f, 0.0f));
