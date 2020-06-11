@@ -2,6 +2,7 @@
 #include "GLFW/glfw3.h"
 
 #include "utils/utils.h"
+#include "Object.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "utils/stb_image.h"
@@ -103,7 +104,57 @@ int main()
 // 			0, 2, 3
 // 		};
 
-		float vertices[] = {
+
+// 		float vertices[] = {
+// 			0.5f,   0.5f,  -0.5f,       0.0f,  0.0f,
+// 			0.5f,   0.5f,   0.5f,		1.0f,  0.0f,
+// 		   -0.5f,   0.5f,   0.5f,		1.0f,  1.0f,
+// 		   -0.5f,   0.5f,  -0.5f,		0.0f,  1.0f,
+// 
+// 			0.5f,  -0.5f,  -0.5f,		1.0f,  1.0f,
+// 			0.5f,  -0.5f,   0.5f,		0.0f,  1.0f,
+// 		   -0.5f,  -0.5f,   0.5f,		0.0f,  0.0f,
+// 		   -0.5f,  -0.5f,  -0.5f,		1.0f,  0.0f,
+// 
+// 		};
+// 
+// 		unsigned int indices[] = {
+// 			2, 1, 0, 
+// 			2, 0, 3,
+// 			1, 5, 4, 
+// 			1, 4, 0, 
+// 			6, 5, 4,
+// 			6, 4, 7,
+// 			2, 6, 5,
+// 			2, 5, 1, 
+// 			0, 4, 7,
+// 			0, 7, 3,
+// 			3, 7, 6, 
+// 			3, 6, 2
+// 		};
+// 
+// 		//Object cube(vertices, layout, indices)
+// 
+// 		unsigned int vao, vbo, ebo;
+// 
+// 		glCall(glGenVertexArrays(1, &vao));
+// 		glCall(glBindVertexArray(vao));
+// 
+// 		glCall(glGenBuffers(1, &vbo));
+// 		glCall(glBindBuffer(GL_ARRAY_BUFFER, vbo));
+// 		glCall(glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW));
+// 
+// 		glCall(glGenBuffers(1, &ebo));
+// 		glCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo));
+// 		glCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW));
+// 
+// 		glCall(glEnableVertexAttribArray(0));
+// 		glCall(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 20, (void*)0));
+// 
+// 		glCall(glEnableVertexAttribArray(1));
+// 		glCall(glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 20, (void*)12));
+
+	 	std::vector<float> vertices = {
 			0.5f,   0.5f,  -0.5f,       0.0f,  0.0f,
 			0.5f,   0.5f,   0.5f,		1.0f,  0.0f,
 		   -0.5f,   0.5f,   0.5f,		1.0f,  1.0f,
@@ -116,7 +167,7 @@ int main()
 
 		};
 
-		unsigned int indices[] = {
+		std::vector<unsigned int> indices = {
 			2, 1, 0, 
 			2, 0, 3,
 			1, 5, 4, 
@@ -131,26 +182,9 @@ int main()
 			3, 6, 2
 		};
 
-		unsigned int vao, vbo, ebo;
+		std::vector<int> layout = { 3, 2 };
 
-		glCall(glGenVertexArrays(1, &vao));
-		glCall(glBindVertexArray(vao));
-
-		glCall(glGenBuffers(1, &vbo));
-		glCall(glBindBuffer(GL_ARRAY_BUFFER, vbo));
-		glCall(glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW));
-
-		glCall(glGenBuffers(1, &ebo));
-		glCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo));
-		glCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW));
-
-		glCall(glEnableVertexAttribArray(0));
-		glCall(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 20, (void*)0));
-
-		glCall(glEnableVertexAttribArray(1));
-		glCall(glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 20, (void*)12));
-
-
+		Object cube(vertices, layout, indices);
 
 		Shader shader("res/shaders/shader.sh");
 		shader.bind();
@@ -196,6 +230,7 @@ int main()
 
 		glEnable(GL_DEPTH_TEST);
 
+
 		while (!glfwWindowShouldClose(window))
 		{
 			//Process inputs
@@ -204,13 +239,13 @@ int main()
 			glCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 
 
-			glCall(glBindVertexArray(vao));
+			cube.bind();
 			shader.bind();
 
 			glCall(glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0));
 			//glCall(glDrawArrays(GL_TRIANGLES, 0, 36));
 
-			glCall(glBindVertexArray(0));
+			cube.unbind();
 			shader.unbind();
 
 
