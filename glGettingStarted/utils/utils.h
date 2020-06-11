@@ -7,6 +7,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+
 // #define STB_IMAGE_IMPLEMENTATION
 // #include "utils/stb_image.h"
 
@@ -28,5 +29,5 @@ static bool glLogCall(const char* function, const char* file, int line) {
 	return true;
 }
 
-#define LOG std::cout
+#define LOG std::cout<<"LOG:"
 #define END std::endl

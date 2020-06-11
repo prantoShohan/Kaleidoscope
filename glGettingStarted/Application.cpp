@@ -3,9 +3,10 @@
 
 #include "utils/utils.h"
 #include "Object.h"
+#include "Texture.h"
 
-#define STB_IMAGE_IMPLEMENTATION
-#include "utils/stb_image.h"
+#include <map>
+
 
 #include "Shader.h"
 
@@ -199,34 +200,42 @@ int main()
 
 		Object cube(vertices, layout, indices);
 
+		//std::map<std::string, std::string> textures = {
+		//					{"res/textures/container.jpg", "texture1"}
+		//Shader shader("res/shaders/shader.sh", textures, uniforms, layout);
+
 		Shader shader("res/shaders/shader.sh");
 		shader.bind();
 
-		unsigned int tex;
+		Texture tex("res/textures/container.jpg", "texture1");
 
-		glCall(glGenTextures(1, &tex));
-		glCall(glActiveTexture(GL_TEXTURE0));
-		glCall(glBindTexture(GL_TEXTURE_2D, tex));
+// 		unsigned int tex;
+// 
+// 		glCall(glGenTextures(1, &tex));
+// 		glCall(glActiveTexture(GL_TEXTURE0));
+// 		glCall(glBindTexture(GL_TEXTURE_2D, tex));
+// 
+// 		glCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT));
+// 		glCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT));
+// 		glCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
+// 		glCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
+// 
+// 		int width, height, nrChannels;
+// 		stbi_set_flip_vertically_on_load(true);
+// 		unsigned char* data = stbi_load("res/textures/container.jpg", &width, &height, &nrChannels, 0);
+// 		if (data)
+// 		{
+// 			glCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data));
+// 		}
+// 		else
+// 		{
+// 			LOG << "ERROR loading image" << END;
+// 		}
+// 		stbi_image_free(data);
 
-		glCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT));
-		glCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT));
-		glCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
-		glCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
+		/*shader.setUniformInt("texture1", 0);*/
 
-		int width, height, nrChannels;
-		stbi_set_flip_vertically_on_load(true);
-		unsigned char* data = stbi_load("res/textures/container.jpg", &width, &height, &nrChannels, 0);
-		if (data)
-		{
-			glCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data));
-		}
-		else
-		{
-			LOG << "ERROR loading image" << END;
-		}
-		stbi_image_free(data);
-
-		shader.setUniformInt("texture1", 0);
+		shader.setUniformInt(tex.m_name.c_str(), tex.m_textureUnit);
 
 // 		glm::mat4 model = glm::mat4(1.0f);
 // 		model = glm::rotate(model, glm::radians(-30.0f), glm::vec3(1.0f, 0.0f, 0.0f));
