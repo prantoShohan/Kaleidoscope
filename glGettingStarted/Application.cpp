@@ -4,20 +4,67 @@
 #include "utils/utils.h"
 #include "Object.h"
 #include "Texture.h"
+#include "Camera.h"
 
 #include <map>
 
 #include "Shader.h"
 
+
+const unsigned int SCR_WIDTH = 800;
+const unsigned int SCR_HEIGHT = 600;
+
+// camera
+Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
+float lastX = SCR_WIDTH / 2.0f;
+float lastY = SCR_HEIGHT / 2.0f;
+bool firstMouse = true;
+
+// timing
+float deltaTime = 0.0f;	
+float lastFrame = 0.0f;
+
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
 	glViewport(0, 0, width, height);
+
 }
 
 void processInput(GLFWwindow* window)
 {
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
+	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+		camera.ProcessKeyboard(0, deltaTime);
+	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+		camera.ProcessKeyboard(1, deltaTime);
+	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+		camera.ProcessKeyboard(2, deltaTime);
+	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+		camera.ProcessKeyboard(3, deltaTime);
+}
+
+void mouse_callback(GLFWwindow* window, double xpos, double ypos)
+{
+	if (firstMouse)
+	{
+		lastX = xpos;
+		lastY = ypos;
+		firstMouse = false;
+	}
+
+	float xoffset = xpos - lastX;
+	float yoffset = lastY - ypos; // reversed since y-coordinates go from bottom to top
+
+	lastX = xpos;
+	lastY = ypos;
+
+	camera.ProcessMouseMovement(xoffset, yoffset);
+}
+
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+{
+	camera.ProcessMouseScroll(yoffset);
 }
 
 int main()
@@ -42,9 +89,15 @@ int main()
 		std::cout << "Failed to initialize GLAD" << std::endl;
 		return -1;
 	}
+
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
 	
 	glViewport(0, 0, 800, 600);
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+	glfwSetCursorPosCallback(window, mouse_callback);
+	glfwSetScrollCallback(window, scroll_callback);
+
 	{
 // 		float vertices[] = {
 // 
@@ -103,8 +156,6 @@ int main()
 // 			0, 1, 2,
 // 			0, 2, 3
 // 		};
-
-
 // 		float vertices[] = {
 // 			0.5f,   0.5f,  -0.5f,       0.0f,  0.0f,
 // 			0.5f,   0.5f,   0.5f,		1.0f,  0.0f,
@@ -199,62 +250,14 @@ int main()
 
 		Object cube(vertices, layout, indices);
 
-		//std::map<std::string, std::string> textures = {
-		//					{"res/textures/container.jpg", "texture1"}
-		//Shader shader("res/shaders/shader.sh", textures, uniforms, layout);
-
 		Shader shader("res/shaders/shader.sh");
 		shader.bind();
 
 		Texture tex("res/textures/container.jpg", "texture1");
 
-// 		unsigned int tex;
-// 
-// 		glCall(glGenTextures(1, &tex));
-// 		glCall(glActiveTexture(GL_TEXTURE0));
-// 		glCall(glBindTexture(GL_TEXTURE_2D, tex));
-// 
-// 		glCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT));
-// 		glCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT));
-// 		glCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
-// 		glCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
-// 
-// 		int width, height, nrChannels;
-// 		stbi_set_flip_vertically_on_load(true);
-// 		unsigned char* data = stbi_load("res/textures/container.jpg", &width, &height, &nrChannels, 0);
-// 		if (data)
-// 		{
-// 			glCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data));
-// 		}
-// 		else
-// 		{
-// 			LOG << "ERROR loading image" << END;
-// 		}
-// 		stbi_image_free(data);
-
-		/*shader.setUniformInt("texture1", 0);*/
-
 		shader.setTexture(tex);
 
-// 		glm::mat4 model = glm::mat4(1.0f);
-// 		model = glm::rotate(model, glm::radians(-30.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-		 
-		 glm::mat4 model = cube.rotate(1.0f, 1.0f, 0.0f, 45.0f);
-
-		glm::mat4 view = glm::mat4(1.0f);
-		view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
-
-		glm::mat4 projection;
-		projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
-
-
-		shader.setUniformMat4("model", model);
-		shader.setUniformMat4("view", view);
-		shader.setUniformMat4("projection", projection);
-
 		glEnable(GL_DEPTH_TEST);
-
-		model = cube.move(0.5f, 0.0f, -3.0f);
 
 		while (!glfwWindowShouldClose(window))
 		{
@@ -263,10 +266,19 @@ int main()
 			glCall(glClearColor(0.2f, 0.3f, 0.3f, 1.0f));
 			glCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 
-			
+			float currentFrame = glfwGetTime();
+			deltaTime = currentFrame - lastFrame;
+			lastFrame = currentFrame;
+
 
 			cube.bind();
 			shader.bind();
+
+			glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+			shader.setUniformMat4("projection", projection);
+
+			glm::mat4 view = camera.GetViewMatrix();
+			shader.setUniformMat4("view", view);
 
 			for (unsigned int i = 0; i < 10; i++)
 			{
