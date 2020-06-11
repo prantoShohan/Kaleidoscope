@@ -182,6 +182,19 @@ int main()
 			3, 6, 2
 		};
 
+		glm::vec3 cubePositions[] = {
+			glm::vec3(0.0f,  0.0f,  0.0f),
+			glm::vec3(2.0f,  5.0f, -15.0f),
+			glm::vec3(-1.5f, -2.2f, -2.5f),
+			glm::vec3(-3.8f, -2.0f, -12.3f),
+			glm::vec3(2.4f, -0.4f, -3.5f),
+			glm::vec3(-1.7f,  3.0f, -7.5f),
+			glm::vec3(1.3f, -2.0f, -2.5f),
+			glm::vec3(1.5f,  2.0f, -2.5f),
+			glm::vec3(1.5f,  0.2f, -1.5f),
+			glm::vec3(-1.3f,  1.0f, -1.5f)
+		};
+
 		std::vector<int> layout = { 3, 2 };
 
 		Object cube(vertices, layout, indices);
@@ -247,14 +260,18 @@ int main()
 			cube.bind();
 			shader.bind();
 
-			glm::mat4 mod = glm::mat4(1.0f);
+			for (unsigned int i = 0; i < 10; i++)
+			{
+				glm::mat4 model = glm::mat4(1.0f);
+				model = glm::translate(model, cubePositions[i]);
+				float angle = 20.0f * i;
+				model = glm::rotate(model, glm::radians(angle), glm::vec3(sin(glfwGetTime()), 0.3f, 0.5f));
+				shader.setUniformMat4("model", model);
 
-			mod = glm::translate(mod, glm::vec3(sin(glfwGetTime()), cos(glfwGetTime()), -3.0f));
-			mod = glm::rotate(mod, glm::radians(45.0f), glm::vec3(1.0f, 1.0f, 0.0f));
+				glCall(glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0));
+			}
 
-			shader.setUniformMat4("model", mod);
-
-			glCall(glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0));
+			
 			//glCall(glDrawArrays(GL_TRIANGLES, 0, 36));
 
 			cube.unbind();
