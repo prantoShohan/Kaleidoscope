@@ -215,8 +215,10 @@ int main()
 
 		shader.setUniformInt("texture1", 0);
 
-		glm::mat4 model = glm::mat4(1.0f);
-		model = glm::rotate(model, glm::radians(-30.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+// 		glm::mat4 model = glm::mat4(1.0f);
+// 		model = glm::rotate(model, glm::radians(-30.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		 
+		 glm::mat4 model = cube.rotate(1.0f, 1.0f, 0.0f, 45.0f);
 
 		glm::mat4 view = glm::mat4(1.0f);
 		view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
@@ -224,12 +226,14 @@ int main()
 		glm::mat4 projection;
 		projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
 
+
 		shader.setUniformMat4("model", model);
 		shader.setUniformMat4("view", view);
 		shader.setUniformMat4("projection", projection);
 
 		glEnable(GL_DEPTH_TEST);
 
+		model = cube.move(0.5f, 0.0f, -3.0f);
 
 		while (!glfwWindowShouldClose(window))
 		{
@@ -238,9 +242,17 @@ int main()
 			glCall(glClearColor(0.2f, 0.3f, 0.3f, 1.0f));
 			glCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 
+			
 
 			cube.bind();
 			shader.bind();
+
+			glm::mat4 mod = glm::mat4(1.0f);
+
+			mod = glm::translate(mod, glm::vec3(sin(glfwGetTime()), cos(glfwGetTime()), -3.0f));
+			mod = glm::rotate(mod, glm::radians(45.0f), glm::vec3(1.0f, 1.0f, 0.0f));
+
+			shader.setUniformMat4("model", mod);
 
 			glCall(glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0));
 			//glCall(glDrawArrays(GL_TRIANGLES, 0, 36));

@@ -19,8 +19,11 @@ public:
 	bool m_useIndex;
 	bool m_bound;
 
+	glm::mat4 model;
+
 	Object(std::vector<float> vertices, std::vector<int> layout, std::vector<unsigned int> indices)
-		:m_vertices(vertices), m_indices(indices), m_layout(layout), m_useIndex(true)
+		:m_vertices(vertices), m_indices(indices), m_layout(layout),
+		 m_useIndex(true), model(glm::mat4(1.0f)),m_bound(false)
 	{
 
 		glCall(glGenVertexArrays(1, &m_vao));
@@ -57,7 +60,8 @@ public:
 	}
 
 	Object(std::vector<float> vertices, std::vector<int> layout)
-		:m_vertices(vertices), m_indices({ 0 }), m_layout(layout), m_useIndex(false)
+		:m_vertices(vertices), m_indices({ 0 }), m_layout(layout),
+		 m_useIndex(false), model(glm::mat4(1.0f)), m_bound(false), m_ebo(0)
 	{
 
 		glCall(glGenVertexArrays(1, &m_vao));
@@ -104,6 +108,28 @@ public:
 		}
 	}
 
+	glm::mat4 move(float x, float y, float z)
+	{
+		model = glm::translate(model, glm::vec3(x, y, z));
+		return model;
+	}
+
+	glm::mat4 rotate(float x, float y, float z, float degree)
+	{
+		model = glm::rotate(model, glm::radians(degree), glm::vec3(x, y, z));
+		return model;
+	}
+
+	glm::mat4 transform(glm::mat4 transform)
+	{
+		model *= transform;
+		return model;
+	}
+
+	glm::mat4 getModel()
+	{
+		return model;
+	}
 
 };
 
