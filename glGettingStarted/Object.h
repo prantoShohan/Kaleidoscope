@@ -106,6 +106,7 @@ public:
 
 	void move();
 	void moveUp();
+	void moveDown();
 
 };
 
