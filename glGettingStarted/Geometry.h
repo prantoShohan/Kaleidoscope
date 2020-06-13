@@ -21,6 +21,8 @@ public:
 
 	glm::mat4 model;
 
+	Geometry() {};
+
 	Geometry(std::vector<float> vertices, std::vector<int> layout, std::vector<unsigned int> indices)
 		:m_vertices(vertices), m_indices(indices), m_layout(layout),
 		 m_useIndex(true), model(glm::mat4(1.0f)),m_bound(false)
