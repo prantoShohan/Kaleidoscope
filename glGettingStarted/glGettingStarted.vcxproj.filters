@@ -38,10 +38,10 @@
     <ClInclude Include="utils\stb_image.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Object.h">
+    <ClInclude Include="Texture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Texture.h">
+    <ClInclude Include="Geometry.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -50,6 +50,9 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\textures\container.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\im.jpg">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

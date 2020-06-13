@@ -2,7 +2,7 @@
 #include "GLFW/glfw3.h"
 
 #include "utils/utils.h"
-#include "Object.h"
+#include "Geometry.h"
 #include "Texture.h"
 
 #include <map>
@@ -46,114 +46,6 @@ int main()
 	glViewport(0, 0, 800, 600);
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 	{
-// 		float vertices[] = {
-// 
-// 		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-// 		 0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-// 		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-// 		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-// 		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-// 		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f
-// 
-// 		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-// 		 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-// 		 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-// 		 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-// 		-0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
-// 		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-// 
-// 		-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-// 		-0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-// 		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-// 		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-// 		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-// 		-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-// 
-// 		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-// 		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-// 		 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-// 		 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-// 		 0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-// 		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-// 
-// 		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-// 		 0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
-// 		 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-// 		 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-// 		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-// 		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-// 
-// 		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-// 		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-// 		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-// 		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-// 		-0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
-// 		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
-// 
-// 		};
-// 		float vertices[] = {
-// 			// positions          // colors           // texture coords
-// 			 0.5f,  0.5f, 0.0f,  1.0f, 1.0f,   // top right
-// 			 0.5f, -0.5f, 0.0f,  1.0f, 0.0f,   // bottom right
-// 			-0.5f, -0.5f, 0.0f,  0.0f, 0.0f,   // bottom left
-// 			-0.5f,  0.5f, 0.0f,  0.0f, 1.0f    // top left 
-// 		};
-// 
-// 		unsigned int indices[] = {
-// 			0, 1, 2,
-// 			0, 2, 3
-// 		};
-
-
-// 		float vertices[] = {
-// 			0.5f,   0.5f,  -0.5f,       0.0f,  0.0f,
-// 			0.5f,   0.5f,   0.5f,		1.0f,  0.0f,
-// 		   -0.5f,   0.5f,   0.5f,		1.0f,  1.0f,
-// 		   -0.5f,   0.5f,  -0.5f,		0.0f,  1.0f,
-// 
-// 			0.5f,  -0.5f,  -0.5f,		1.0f,  1.0f,
-// 			0.5f,  -0.5f,   0.5f,		0.0f,  1.0f,
-// 		   -0.5f,  -0.5f,   0.5f,		0.0f,  0.0f,
-// 		   -0.5f,  -0.5f,  -0.5f,		1.0f,  0.0f,
-// 
-// 		};
-// 
-// 		unsigned int indices[] = {
-// 			2, 1, 0, 
-// 			2, 0, 3,
-// 			1, 5, 4, 
-// 			1, 4, 0, 
-// 			6, 5, 4,
-// 			6, 4, 7,
-// 			2, 6, 5,
-// 			2, 5, 1, 
-// 			0, 4, 7,
-// 			0, 7, 3,
-// 			3, 7, 6, 
-// 			3, 6, 2
-// 		};
-// 
-// 		//Object cube(vertices, layout, indices)
-// 
-// 		unsigned int vao, vbo, ebo;
-// 
-// 		glCall(glGenVertexArrays(1, &vao));
-// 		glCall(glBindVertexArray(vao));
-// 
-// 		glCall(glGenBuffers(1, &vbo));
-// 		glCall(glBindBuffer(GL_ARRAY_BUFFER, vbo));
-// 		glCall(glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW));
-// 
-// 		glCall(glGenBuffers(1, &ebo));
-// 		glCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo));
-// 		glCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW));
-// 
-// 		glCall(glEnableVertexAttribArray(0));
-// 		glCall(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 20, (void*)0));
-// 
-// 		glCall(glEnableVertexAttribArray(1));
-// 		glCall(glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 20, (void*)12));
-
 	 	std::vector<float> vertices = {
 			0.5f,   0.5f,  -0.5f,       0.0f,  0.0f,
 			0.5f,   0.5f,   0.5f,		1.0f,  0.0f,
@@ -197,47 +89,14 @@ int main()
 
 		std::vector<int> layout = { 3, 2 };
 
-		Object cube(vertices, layout, indices);
-
-		//std::map<std::string, std::string> textures = {
-		//					{"res/textures/container.jpg", "texture1"}
-		//Shader shader("res/shaders/shader.sh", textures, uniforms, layout);
+		Geometry cube(vertices, layout, indices);
 
 		Shader shader("res/shaders/shader.sh");
 		shader.bind();
 
 		Texture tex("res/textures/container.jpg", "texture1");
 
-// 		unsigned int tex;
-// 
-// 		glCall(glGenTextures(1, &tex));
-// 		glCall(glActiveTexture(GL_TEXTURE0));
-// 		glCall(glBindTexture(GL_TEXTURE_2D, tex));
-// 
-// 		glCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT));
-// 		glCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT));
-// 		glCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
-// 		glCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
-// 
-// 		int width, height, nrChannels;
-// 		stbi_set_flip_vertically_on_load(true);
-// 		unsigned char* data = stbi_load("res/textures/container.jpg", &width, &height, &nrChannels, 0);
-// 		if (data)
-// 		{
-// 			glCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data));
-// 		}
-// 		else
-// 		{
-// 			LOG << "ERROR loading image" << END;
-// 		}
-// 		stbi_image_free(data);
-
-		/*shader.setUniformInt("texture1", 0);*/
-
 		shader.setTexture(tex);
-
-// 		glm::mat4 model = glm::mat4(1.0f);
-// 		model = glm::rotate(model, glm::radians(-30.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 		 
 		 glm::mat4 model = cube.rotate(1.0f, 1.0f, 0.0f, 45.0f);
 

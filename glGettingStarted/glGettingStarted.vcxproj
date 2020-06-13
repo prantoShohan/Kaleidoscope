@@ -155,8 +155,8 @@
     <ClCompile Include="Vendor\glad.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Geometry.h" />
     <ClInclude Include="Texture.h" />
-    <ClInclude Include="Object.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="utils\stb_image.h" />
     <ClInclude Include="utils\utils.h" />
@@ -166,6 +166,7 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\textures\container.jpg" />
+    <Image Include="res\textures\im.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
