@@ -119,7 +119,7 @@ int main()
 		//view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
 
 		glm::mat4 projection;
-		projection = glm::ortho(-400.0f, 400.0f, -300.0f, 300.0f, -1.0f, 1.0f);
+		projection = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f, -1.0f, 1.0f);
 
 
 
@@ -149,7 +149,7 @@ int main()
 			shader.setUniformVec2("tTwo", tTwo);
 			shader.setUniformVec2("tZero", tZero);
 
-			glCall(glDrawElements(GL_TRIANGLES, 9, GL_UNSIGNED_INT, 0));
+			glCall(glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, 0));
 
 			lattice.unbind();
 			shader.unbind();
