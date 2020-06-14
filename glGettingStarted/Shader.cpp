@@ -55,6 +55,11 @@ void Shader::setUniformMat4(std::string name, glm::mat4 data)
 	glCall(glUniformMatrix4fv(getUniformLoaction(name), 1, GL_FALSE, glm::value_ptr(data)));
 }
 
+void Shader::setUniformVec2(std::string name, glm::vec2 data)
+{
+	glCall(glUniform2fv(getUniformLoaction(name), 1, glm::value_ptr(data)));
+}
+
 int Shader::getUniformLoaction(std::string name)
 {
 	if (m_uniforms.find(name) != m_uniforms.end())

@@ -4,7 +4,7 @@
 
 struct Vertex {
     glm::vec3 pos;
-    glm::vec2 tex;
+    float t;
 };
 
 class Equil
@@ -12,7 +12,7 @@ class Equil
 public:
     std::vector<Vertex> vertices;
     std::vector<glm::uvec3> faces;
-    std::vector<int> layout = { 3, 2 };
+    std::vector<int> layout = { 3, 1 };
     std::vector<glm::vec2> texCoord;
 
     Geometry lattice;

@@ -30,6 +30,7 @@ public:
 	void setUniformInt(std::string name, int data);
 	void setuniformFloat(std::string name, float data);
 	void setUniformMat4(std::string name, glm::mat4 data);
+	void setUniformVec2(std::string name, glm::vec2 data);
 
 	int getUniformLoaction(std::string name);
 

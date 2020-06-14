@@ -10,6 +10,56 @@
 
 #include "Shader.h"
 
+float b = 0.5f;
+
+glm::vec2 tZero(0.0f, 0.0f);
+glm::vec2 tOne(b, 0.0f);
+glm::vec2 tTwo(b / 2, b* sin(-30));
+
+
+
+
+bool firstMouse = true;
+float lastX = 400, lastY = 300;
+
+void mouse_callback(GLFWwindow* window, double xpos, double ypos)
+{	
+
+	int pressed = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
+
+	if (pressed == GLFW_PRESS)
+	{
+
+		if (firstMouse)
+		{
+			lastX = xpos;
+			lastY = ypos;
+			firstMouse = false;
+		}
+
+		float xoffset = xpos - lastX;
+		float yoffset = lastY - ypos;
+		
+
+		float sensitivity = 1.0f;
+		xoffset *= sensitivity;
+		yoffset *= sensitivity;
+
+		tZero.x += xoffset / 800;
+		tZero.y += yoffset / 600;
+
+		tOne.x += xoffset / 800;
+		tOne.y += yoffset / 600;
+
+		tTwo.x += xoffset / 800;
+		tTwo.y += yoffset / 600;
+	}
+	lastX = xpos;
+	lastY = ypos;
+
+}
+
+
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
 	glViewport(0, 0, width, height);
@@ -44,24 +94,17 @@ int main()
 		return -1;
 	}
 	
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+
+	glfwSetCursorPosCallback(window, mouse_callback);
+
 	glViewport(0, 0, 800, 600);
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 	{
-	 	std::vector<float> vertices = {
-			 0.0f,  0.5f,  0.0f,    0.0f,  0.5f,
-			-0.5f, -0.5f,  0.0f,   -0.5f, -0.5f,
-			 0.5f, -0.5f,  0.0f,    0.5f, -0.5f,
-		};
-
-		std::vector<unsigned int> indices = {
-			0, 1, 2
-		};
-
-
 		std::vector<int> layout = { 3, 2 };
 
 		//Geometry cube(vertices, layout, indices);
-		Equil lattice(.5f);
+		Equil lattice(150.0f);
 
 		Shader shader("res/shaders/shader.sh");
 		shader.bind();
@@ -76,11 +119,15 @@ int main()
 		//view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
 
 		glm::mat4 projection;
-		projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
+		projection = glm::ortho(-400.0f, 400.0f, -300.0f, 300.0f, -1.0f, 1.0f);
+
+
+
 
 
 		shader.setUniformMat4("model", model);
 		shader.setUniformMat4("view", view);
+		shader.setUniformMat4("projection", projection);
 
 		glEnable(GL_DEPTH_TEST);
 
@@ -98,7 +145,11 @@ int main()
 			lattice.bind();
 			shader.bind();
 
-			glCall(glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0));
+			shader.setUniformVec2("tOne", tOne);
+			shader.setUniformVec2("tTwo", tTwo);
+			shader.setUniformVec2("tZero", tZero);
+
+			glCall(glDrawElements(GL_TRIANGLES, 9, GL_UNSIGNED_INT, 0));
 
 			lattice.unbind();
 			shader.unbind();
