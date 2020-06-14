@@ -18,10 +18,16 @@ Equil::Equil(float a)
 		vertices.push_back({ glm::vec3((3 * i * a) + (2.5f * a),    a * sin(-30),   0.0f),       1.0f });
 
 
-		faces.push_back(glm::uvec3(0, 1, 2));
-		faces.push_back(glm::uvec3(1, 3, 2));
-		faces.push_back(glm::uvec3(1, 4, 3));
-		faces.push_back(glm::uvec3(3, 4, 5));
+		faces.push_back(glm::uvec3(6 * i + 0, 6 * i + 1, 6 * i + 2));
+		faces.push_back(glm::uvec3(6 * i + 1, 6 * i + 3, 6 * i + 2));
+		faces.push_back(glm::uvec3(6 * i + 1, 6 * i + 4, 6 * i + 3));
+		faces.push_back(glm::uvec3(6 * i + 3, 6 * i + 4, 6 * i + 5));
+
+		if (i > 0)
+		{
+			faces.push_back(glm::uvec3(6 * i - 2, 6 * i, 6 * i - 1));
+			faces.push_back(glm::uvec3(6 * i, 6 * i + 2, 6 * i - 1));
+		}
 		
 	}
 

@@ -149,7 +149,7 @@ int main()
 			shader.setUniformVec2("tTwo", tTwo);
 			shader.setUniformVec2("tZero", tZero);
 
-			glCall(glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, 0));
+			glCall(glDrawElements(GL_TRIANGLES, 30 + 18, GL_UNSIGNED_INT, 0));
 
 			lattice.unbind();
 			shader.unbind();
