@@ -79,7 +79,7 @@ int main()
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	//glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
-	GLFWwindow* window = glfwCreateWindow(800, 600, "LearnOpenGL", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(800, 600, "Kaleidoscope", NULL, NULL);
 	if (window == NULL)
 	{
 		std::cout << "Failed to create GLFW window" << std::endl;
@@ -104,7 +104,7 @@ int main()
 		std::vector<int> layout = { 3, 2 };
 
 		//Geometry cube(vertices, layout, indices);
-		Equil lattice(100.0f, 4, 4);
+		Equil lattice(150.0f, 4, 4);
 
 		Shader shader("res/shaders/shader.sh");
 		shader.bind();
@@ -119,7 +119,7 @@ int main()
 		//view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
 
 		glm::mat4 projection;
-		projection = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f, -1.0f, 1.0f);
+		projection = glm::ortho(100.0f, 800.0f, 0.0f, 600.0f, -1.0f, 1.0f);
 
 
 

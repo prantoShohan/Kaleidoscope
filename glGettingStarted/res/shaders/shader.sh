@@ -13,6 +13,7 @@ uniform vec2 tZero;
 uniform vec2 tOne;
 uniform vec2 tTwo;
 
+
 void main()
 {
     gl_Position = projection * view * model * vec4(aPos, 1.0f);
