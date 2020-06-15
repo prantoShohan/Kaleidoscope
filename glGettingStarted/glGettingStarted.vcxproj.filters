@@ -61,5 +61,11 @@
     <Image Include="res\textures\im.jpg">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="res\textures\im2.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\im3.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

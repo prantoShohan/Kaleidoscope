@@ -10,6 +10,8 @@
 
 #include "Shader.h"
 
+#include <Windows.h>
+
 float b = 0.5f;
 
 glm::vec2 tZero(0.0f, 0.0f);
@@ -71,7 +73,7 @@ void processInput(GLFWwindow* window)
 		glfwSetWindowShouldClose(window, true);
 }
 
-int main()
+int WinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ int nShowCmd )
 {
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -109,7 +111,7 @@ int main()
 		Shader shader("res/shaders/shader.sh");
 		shader.bind();
 
-		Texture tex("res/textures/im.jpg", "texture1");
+		Texture tex("res/textures/im3.jpg", "texture1");
 
 		shader.setTexture(tex);
 		 
