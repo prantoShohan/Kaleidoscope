@@ -104,7 +104,7 @@ int main()
 		std::vector<int> layout = { 3, 2 };
 
 		//Geometry cube(vertices, layout, indices);
-		Equil lattice(100.0f, 3, 3);
+		Equil lattice(100.0f, 4, 4);
 
 		Shader shader("res/shaders/shader.sh");
 		shader.bind();
@@ -149,7 +149,7 @@ int main()
 			shader.setUniformVec2("tTwo", tTwo);
 			shader.setUniformVec2("tZero", tZero);
 
-			glCall(glDrawElements(GL_TRIANGLES, 150, GL_UNSIGNED_INT, 0));
+			glCall(glDrawElements(GL_TRIANGLES, 600, GL_UNSIGNED_INT, 0));
 
 			lattice.unbind();
 			shader.unbind();
