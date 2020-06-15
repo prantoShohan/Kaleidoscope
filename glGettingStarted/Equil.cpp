@@ -3,32 +3,36 @@
 
 
 
-Equil::Equil(float a)
+Equil::Equil(float a, int x, int y)
 {
-	
-	for (int i = 0; i < 1; i++)
+	int ind = 0;
+	for(int j = 0; j < y; j++)
 	{
-		vertices.push_back({ glm::vec3(3 * a * i,    0.0f,           0.0f),       0.0f });
-		vertices.push_back({ glm::vec3(3 * a * i + a,       0.0f,           0.0f),       1.0f });
-		vertices.push_back({ glm::vec3((3 * i * a) + (a / 2),   a * sin(-30),   0.0f),       2.0f });
-
-
-		vertices.push_back({ glm::vec3((3 * i * a) + (1.5f * a),   a * sin(-30),   0.0f),       0.0f });
-		vertices.push_back({ glm::vec3((3 * i * a) + (2.0f * a),      0.0f,           0.0f),       2.0f });
-		vertices.push_back({ glm::vec3((3 * i * a) + (2.5f * a),    a * sin(-30),   0.0f),       1.0f });
-
-
-		faces.push_back(glm::uvec3(6 * i + 0, 6 * i + 1, 6 * i + 2));
-		faces.push_back(glm::uvec3(6 * i + 1, 6 * i + 3, 6 * i + 2));
-		faces.push_back(glm::uvec3(6 * i + 1, 6 * i + 4, 6 * i + 3));
-		faces.push_back(glm::uvec3(6 * i + 3, 6 * i + 4, 6 * i + 5));
-
-		if (i > 0)
+		for (int i = 0; i < x; i++)
 		{
-			faces.push_back(glm::uvec3(6 * i - 2, 6 * i, 6 * i - 1));
-			faces.push_back(glm::uvec3(6 * i, 6 * i + 2, 6 * i - 1));
+			vertices.push_back({ glm::vec3(3 * a * i,                    (a * sin(-30) * (j * 2)),                     0.0f),       0.0f });
+			vertices.push_back({ glm::vec3(3 * a * i + a,                (a * sin(-30) * (j * 2)),                     0.0f),       1.0f });
+			vertices.push_back({ glm::vec3((3 * i * a) + (a / 2),        (a * sin(-30) * (j * 2)) + (a * sin(-30)),    0.0f),       2.0f });
+
+
+			vertices.push_back({ glm::vec3((3 * i * a) + (1.5f * a),     (a * sin(-30) * (j * 2)) + (a * sin(-30)),    0.0f),       0.0f });
+			vertices.push_back({ glm::vec3((3 * i * a) + (2.0f * a),     (a * sin(-30) * (j * 2)),                     0.0f),       2.0f });
+			vertices.push_back({ glm::vec3((3 * i * a) + (2.5f * a),     (a * sin(-30) * (j * 2)) + (a * sin(-30)),    0.0f),       1.0f });
+
+
+			faces.push_back(glm::uvec3(6 * i + 0 + ind,      6 * i + 1 + ind,     6 * i + 2 + ind));
+			faces.push_back(glm::uvec3(6 * i + 1 + ind,      6 * i + 3 + ind,     6 * i + 2 + ind));
+			faces.push_back(glm::uvec3(6 * i + 1 + ind,      6 * i + 4 + ind,     6 * i + 3 + ind));
+			faces.push_back(glm::uvec3(6 * i + 3 + ind,      6 * i + 4 + ind,     6 * i + 5 + ind));
+
+			if (i > 0)
+			{
+				faces.push_back(glm::uvec3(6 * i - 2 + ind,   6 * i + ind,       6 * i - 1 + ind));
+				faces.push_back(glm::uvec3(6 * i + ind,       6 * i + 2 + ind,   6 * i - 1 + ind));
+			}
+
 		}
-		
+		ind += (6 * x);
 	}
 
 
