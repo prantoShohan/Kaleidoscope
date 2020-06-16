@@ -11,6 +11,7 @@
 #include "Shader.h"
 
 #include <Windows.h>
+#include "Vendor/FastNoise.h"
 
 float b = 0.5f;
 
@@ -64,7 +65,7 @@ glm::vec2 rotateVec2(glm::vec2 tVec, float offset)
 	glm::vec4 tm4(tVec, 1.0f, 1.0f);
 	glm::vec3 pivot((tZero + tOne + tTwo) / 3.0f, 1.0f);
 
-	s = glm::translate(s, -pivot) * glm::rotate(s, glm::radians(offset * 0.2f), glm::vec3(0.0f, 0.0f, 1.0f)) * glm::translate(s, pivot);
+	s = glm::translate(s, -pivot) * glm::rotate(s, glm::radians(offset * 0.1f), glm::vec3(0.0f, 0.0f, 1.0f)) * glm::translate(s, pivot);
 
 
 	tm4 = s * tm4;
@@ -206,6 +207,9 @@ int main()
 
 
 	{
+		FastNoise noise;
+		noise.SetNoiseType(FastNoise::Perlin);
+
 		std::vector<int> layout = { 3, 2 };
 
 		//Geometry cube(vertices, layout, indices);
@@ -228,7 +232,8 @@ int main()
 
 		projection = glm::ortho(100.0f, 800.0f, 0.0f, 600.0f, -1.0f, 1.0f);
 
-
+		float nose = 0.0f;
+		int n = 0;
 
 		shader.setUniformMat4("model", model);
 		shader.setUniformMat4("view", view);
@@ -245,7 +250,28 @@ int main()
 			glCall(glClearColor(0.2f, 0.3f, 0.3f, 1.0f));
 			glCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 
-			
+			float nos = noise.GetNoise(nose + 42, nose+2);
+			float nos2 = noise.GetNoise(nose, nose + 138);
+
+			if (n>10)
+			{
+				tZero.x = nos;
+				tZero.y = nos2;
+				LOG << nos << "  " << nos2 << END;
+
+				tOne.x = nos + b;
+				tOne.y = nos2;
+
+				tTwo.x = nos+ b/2;
+				tTwo.y = nos2 + b*sin(-30);
+
+				nose += 0.1f;
+				n = 0;
+			}
+			else
+			{
+				n++;
+			}
 
 			lattice.bind();
 			shader.bind();

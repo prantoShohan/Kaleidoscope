@@ -163,6 +163,7 @@
     <ClCompile Include="Equil.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="Vendor\FastNoise.cpp" />
     <ClCompile Include="Vendor\glad.c" />
   </ItemGroup>
   <ItemGroup>
@@ -172,6 +173,7 @@
     <ClInclude Include="Shader.h" />
     <ClInclude Include="utils\stb_image.h" />
     <ClInclude Include="utils\utils.h" />
+    <ClInclude Include="Vendor\FastNoise.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\shader.sh" />
