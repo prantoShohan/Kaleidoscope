@@ -22,11 +22,13 @@ float rot = 0;
 
 glm::mat4 projection;
 
+float zoomLevel = 1.0f;
 
 bool firstMouse = true;
 float lastX = 400, lastY = 300;
 
-
+float WIDTH = 800;
+float HEIGHT = 600;
 
 glm::vec2 scaleVec2(glm::vec2 tVec, float offset)
 {
@@ -82,6 +84,7 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 
 	int pressed = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
 	int rPressed = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT);
+	int mPressed = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE);
 
 	if (rPressed == GLFW_PRESS)
 	{
@@ -90,6 +93,24 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 		tZero = rotateVec2(tZero, yof);
 		tOne =  rotateVec2(tOne, yof);
 		tTwo =  rotateVec2(tTwo, yof);
+	}
+
+	if (mPressed)
+	{
+		if (zoomLevel > 1)
+		{
+			zoomLevel -= abs((lastY - ypos) / HEIGHT);
+		}
+		if (zoomLevel < .5)
+		{
+			zoomLevel += abs((lastY - ypos) / HEIGHT);
+		}
+
+		zoomLevel += (lastY - ypos) / HEIGHT;
+
+
+		projection = glm::ortho(100.0f, WIDTH * zoomLevel, 0.0f, HEIGHT * zoomLevel, -1.0f, 1.0f);
+
 	}
 
 	if (pressed == GLFW_PRESS)
@@ -128,9 +149,10 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
 	glViewport(0, 0, width, height);
-	projection = glm::ortho(100.0f, width - 100.0f, 0.0f, (float)height, -1.0f, 1.0f);
+	projection = glm::ortho(100.0f, (width - 100.0f) * zoomLevel, 0.0f, (float)height* zoomLevel, -1.0f, 1.0f);
 
-
+	WIDTH = width;
+	HEIGHT = height;
 }
 
 void processInput(GLFWwindow* window)
