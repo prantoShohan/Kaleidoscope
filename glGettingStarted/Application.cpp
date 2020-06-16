@@ -30,6 +30,9 @@ float lastX = 400, lastY = 300;
 float WIDTH = 800;
 float HEIGHT = 600;
 
+std::string texPath = "res/textures/im.jpg";
+bool setTex = false;
+
 glm::vec2 scaleVec2(glm::vec2 tVec, float offset)
 {
 	float mul = 1.0f;
@@ -69,6 +72,12 @@ glm::vec2 rotateVec2(glm::vec2 tVec, float offset)
 	glm::vec2 tm2(tm4);
 
 	return tm2;
+}
+
+void drop_callback(GLFWwindow* window, int path_count, const char* paths[])
+{
+	setTex = true;
+	texPath = std::string(paths[0]);
 }
 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
@@ -161,7 +170,8 @@ void processInput(GLFWwindow* window)
 		glfwSetWindowShouldClose(window, true);
 }
 
-int WinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ int nShowCmd )
+//int WinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ int nShowCmd )
+int main()
 {
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -188,9 +198,13 @@ int WinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LP
 
 	glfwSetCursorPosCallback(window, mouse_callback);
 	glfwSetScrollCallback(window, scroll_callback);
+	glfwSetDropCallback(window, drop_callback);
 
 	glViewport(0, 0, 800, 600);
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+
+
+
 	{
 		std::vector<int> layout = { 3, 2 };
 
@@ -235,6 +249,13 @@ int WinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LP
 
 			lattice.bind();
 			shader.bind();
+
+			if (setTex)
+			{
+				Texture t(texPath, "texture1");
+				shader.setTexture(t);
+				setTex = false;
+			}
 
 			shader.setUniformVec2("tOne", tOne);
 			shader.setUniformVec2("tTwo", tTwo);
