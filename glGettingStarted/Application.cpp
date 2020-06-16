@@ -30,11 +30,20 @@ float lastX = 400, lastY = 300;
 
 glm::vec2 scaleVec2(glm::vec2 tVec, float offset)
 {
+	float mul = 1.0f;
+	if (offset > 0)
+	{
+		mul = 1.05f;
+	}
+	else if (offset < 0)
+	{
+		mul = 0.95f;
+	}
 	glm::mat4 s = glm::mat4(1.0f);
 	glm::vec4 tm4(tVec, 1.0f, 1.0f);
 	glm::vec3 pivot((tZero + tOne + tTwo) / 3.0f, 1.0f);
 
-	s = glm::translate(s, -pivot) * glm::scale(s, glm::vec3(offset, offset, 1.0f)) * glm::translate(s, pivot);
+	s = glm::translate(s, -pivot) * glm::scale(s, glm::vec3(mul,  mul, 1.0f)) * glm::translate(s, pivot);
 
 
 	tm4 = s * tm4;
@@ -46,7 +55,7 @@ glm::vec2 scaleVec2(glm::vec2 tVec, float offset)
 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
-	float of = yoffset * 0.005f ;
+	float of = yoffset ;
 	tZero = scaleVec2(tZero, of);
 	tOne = scaleVec2(tOne, of);
 	tTwo = scaleVec2(tTwo, of);
