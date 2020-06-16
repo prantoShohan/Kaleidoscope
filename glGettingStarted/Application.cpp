@@ -18,7 +18,7 @@ glm::vec2 tZero = glm::vec2(0.0f, 0.0f);
 glm::vec2 tOne = glm::vec2(b, 0.0f);
 glm::vec2 tTwo = glm::vec2(b / 2, b* sin(-30));
 
-
+float rot = 0;
 
 glm::mat4 projection;
 
@@ -33,17 +33,33 @@ glm::vec2 scaleVec2(glm::vec2 tVec, float offset)
 	float mul = 1.0f;
 	if (offset > 0)
 	{
-		mul = 1.05f;
+		mul = 1.03f;
 	}
 	else if (offset < 0)
 	{
-		mul = 0.95f;
+		mul = 0.97f;
 	}
 	glm::mat4 s = glm::mat4(1.0f);
 	glm::vec4 tm4(tVec, 1.0f, 1.0f);
 	glm::vec3 pivot((tZero + tOne + tTwo) / 3.0f, 1.0f);
 
 	s = glm::translate(s, -pivot) * glm::scale(s, glm::vec3(mul,  mul, 1.0f)) * glm::translate(s, pivot);
+
+
+	tm4 = s * tm4;
+
+	glm::vec2 tm2(tm4);
+
+	return tm2;
+}
+
+glm::vec2 rotateVec2(glm::vec2 tVec, float offset)
+{
+	glm::mat4 s = glm::mat4(1.0f);
+	glm::vec4 tm4(tVec, 1.0f, 1.0f);
+	glm::vec3 pivot((tZero + tOne + tTwo) / 3.0f, 1.0f);
+
+	s = glm::translate(s, -pivot) * glm::rotate(s, glm::radians(offset * 0.2f), glm::vec3(0.0f, 0.0f, 1.0f)) * glm::translate(s, pivot);
 
 
 	tm4 = s * tm4;
@@ -65,6 +81,16 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 {	
 
 	int pressed = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
+	int rPressed = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT);
+
+	if (rPressed == GLFW_PRESS)
+	{
+		float yof = lastY - ypos;
+
+		tZero = rotateVec2(tZero, yof);
+		tOne =  rotateVec2(tOne, yof);
+		tTwo =  rotateVec2(tTwo, yof);
+	}
 
 	if (pressed == GLFW_PRESS)
 	{
