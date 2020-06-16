@@ -14,15 +14,43 @@
 
 float b = 0.5f;
 
-glm::vec2 tZero(0.0f, 0.0f);
-glm::vec2 tOne(b, 0.0f);
-glm::vec2 tTwo(b / 2, b* sin(-30));
+glm::vec2 tZero = glm::vec2(0.0f, 0.0f);
+glm::vec2 tOne = glm::vec2(b, 0.0f);
+glm::vec2 tTwo = glm::vec2(b / 2, b* sin(-30));
 
 
+
+glm::mat4 projection;
 
 
 bool firstMouse = true;
 float lastX = 400, lastY = 300;
+
+
+
+glm::vec2 scaleVec2(glm::vec2 tVec, float offset)
+{
+	glm::mat4 s = glm::mat4(1.0f);
+	glm::vec4 tm4(tVec, 1.0f, 1.0f);
+	glm::vec3 pivot((tZero + tOne + tTwo) / 3.0f, 1.0f);
+
+	s = glm::translate(s, -pivot) * glm::scale(s, glm::vec3(offset, offset, 1.0f)) * glm::translate(s, pivot);
+
+
+	tm4 = s * tm4;
+
+	glm::vec2 tm2(tm4);
+
+	return tm2;
+}
+
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+{
+	float of = yoffset * 0.005f ;
+	tZero = scaleVec2(tZero, of);
+	tOne = scaleVec2(tOne, of);
+	tTwo = scaleVec2(tTwo, of);
+}
 
 void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 {	
@@ -65,6 +93,9 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
 	glViewport(0, 0, width, height);
+	projection = glm::ortho(100.0f, width - 100.0f, 0.0f, (float)height, -1.0f, 1.0f);
+
+
 }
 
 void processInput(GLFWwindow* window)
@@ -99,6 +130,7 @@ int WinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LP
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
 	glfwSetCursorPosCallback(window, mouse_callback);
+	glfwSetScrollCallback(window, scroll_callback);
 
 	glViewport(0, 0, 800, 600);
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
@@ -106,9 +138,10 @@ int WinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LP
 		std::vector<int> layout = { 3, 2 };
 
 		//Geometry cube(vertices, layout, indices);
-		Equil lattice(150.0f, 4, 4);
+		Equil lattice(150.0f, 5, 4);
 
 		Shader shader("res/shaders/shader.sh");
+
 		shader.bind();
 
 		Texture tex("res/textures/im3.jpg", "texture1");
@@ -120,10 +153,9 @@ int WinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LP
 		glm::mat4 view = glm::mat4(1.0f);
 		//view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
 
-		glm::mat4 projection;
+
+
 		projection = glm::ortho(100.0f, 800.0f, 0.0f, 600.0f, -1.0f, 1.0f);
-
-
 
 
 
@@ -150,6 +182,8 @@ int WinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LP
 			shader.setUniformVec2("tOne", tOne);
 			shader.setUniformVec2("tTwo", tTwo);
 			shader.setUniformVec2("tZero", tZero);
+
+			shader.setUniformMat4("projection", projection);
 
 			glCall(glDrawElements(GL_TRIANGLES, 600, GL_UNSIGNED_INT, 0));
 
