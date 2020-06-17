@@ -35,8 +35,8 @@ public:
 	int n = 0;
 
 
-	Kaleido();
-	void init();
+	Kaleido() {};
+	void init(int height, int width);
 	void draw();
 
 

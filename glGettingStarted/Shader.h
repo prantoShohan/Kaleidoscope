@@ -20,7 +20,7 @@ private:
 public:
 	unsigned int m_rendererID;
 	Shader(const std::string filepath);
-	Shader();
+	Shader() {};
 	~Shader();
 
 	void bind();

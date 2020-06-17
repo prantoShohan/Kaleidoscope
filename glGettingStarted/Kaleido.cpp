@@ -1,8 +1,11 @@
 #include "Kaleido.h"
 
 
-void Kaleido::init()
+void Kaleido::init(int height, int width)
 {
+	m_height = height;
+	m_width = width;
+
 	shader = Shader("res/shaders/shader.sh");
 	lattice = Equil(150.0f, 5, 4);
 
@@ -12,8 +15,8 @@ void Kaleido::init()
 	shader.bind();
 
 	Texture tex("res/textures/im3.jpg", "texture1");
-
 	shader.setTexture(tex);
+
 
 	glm::mat4 model = glm::mat4(0.1f);
 
