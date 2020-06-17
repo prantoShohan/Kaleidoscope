@@ -33,6 +33,7 @@ float HEIGHT = 600;
 
 std::string texPath = "res/textures/im.jpg";
 bool setTex = false;
+bool play = false;
 
 glm::vec2 scaleVec2(glm::vec2 tVec, float offset)
 {
@@ -73,6 +74,19 @@ glm::vec2 rotateVec2(glm::vec2 tVec, float offset)
 	glm::vec2 tm2(tm4);
 
 	return tm2;
+}
+
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+	if (key == GLFW_KEY_P && action == GLFW_PRESS)
+	{
+		play = true;
+	}
+
+	if (key == GLFW_KEY_S && action == GLFW_PRESS)
+	{
+		play = false;
+	}
 }
 
 void drop_callback(GLFWwindow* window, int path_count, const char* paths[])
@@ -159,6 +173,7 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
 	glViewport(0, 0, width, height);
+	//----kal.fr----
 	projection = glm::ortho(100.0f, (width - 100.0f) * zoomLevel, 0.0f, (float)height* zoomLevel, -1.0f, 1.0f);
 
 	WIDTH = width;
@@ -196,17 +211,20 @@ int main()
 	}
 	
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-
 	glfwSetCursorPosCallback(window, mouse_callback);
 	glfwSetScrollCallback(window, scroll_callback);
 	glfwSetDropCallback(window, drop_callback);
+	glfwSetKeyCallback(window, key_callback);
+	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
 	glViewport(0, 0, 800, 600);
-	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
 
 
 	{
+
+		//------kal.init()---------
+
 		FastNoise noise;
 		noise.SetNoiseType(FastNoise::Perlin);
 
@@ -239,6 +257,16 @@ int main()
 		shader.setUniformMat4("view", view);
 		shader.setUniformMat4("projection", projection);
 
+
+
+
+
+
+
+
+
+
+
 		glEnable(GL_DEPTH_TEST);
 
 		//model = cube.move(0.5f, 0.0f, -3.0f);
@@ -250,27 +278,35 @@ int main()
 			glCall(glClearColor(0.2f, 0.3f, 0.3f, 1.0f));
 			glCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 
-			float nos = noise.GetNoise(nose + 42, nose+2);
-			float nos2 = noise.GetNoise(nose, nose + 138);
 
-			if (n>10)
+
+
+
+			//-------kal.loop();
+			if(play)
 			{
-				tZero.x = nos;
-				tZero.y = nos2;
-				LOG << nos << "  " << nos2 << END;
+				float nos = noise.GetNoise(nose + 42, nose + 2);
+				float nos2 = noise.GetNoise(nose, nose + 138);
 
-				tOne.x = nos + b;
-				tOne.y = nos2;
+				if (n > 10)
+				{
+					tZero.x = nos;
+					tZero.y = nos2;
+					LOG << nos << "  " << nos2 << END;
 
-				tTwo.x = nos+ b/2;
-				tTwo.y = nos2 + b*sin(-30);
+					tOne.x = nos + b;
+					tOne.y = nos2;
 
-				nose += 0.1f;
-				n = 0;
-			}
-			else
-			{
-				n++;
+					tTwo.x = nos + b / 2;
+					tTwo.y = nos2 + b * sin(-30);
+
+					nose += 0.1f;
+					n = 0;
+				}
+				else
+				{
+					n++;
+				}
 			}
 
 			lattice.bind();
@@ -293,6 +329,11 @@ int main()
 
 			lattice.unbind();
 			shader.unbind();
+
+
+
+
+
 
 
 			glfwSwapBuffers(window);

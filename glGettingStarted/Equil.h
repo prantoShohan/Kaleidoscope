@@ -17,7 +17,7 @@ public:
 
     Geometry lattice;
 
-
+    Equil();
     Equil(float a, int x, int y);
 
     void bind();

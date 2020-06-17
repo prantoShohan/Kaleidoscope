@@ -3,6 +3,7 @@
 #include <fstream>
 #include <sstream>
 
+
 Shader::Shader(const std::string filepath)
 	:m_filepath(filepath), bound(false)
 {

@@ -161,6 +161,7 @@
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="Equil.cpp" />
+    <ClCompile Include="Kaleido.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Vendor\FastNoise.cpp" />
@@ -169,6 +170,7 @@
   <ItemGroup>
     <ClInclude Include="Equil.h" />
     <ClInclude Include="Geometry.h" />
+    <ClInclude Include="Kaleido.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="utils\stb_image.h" />
